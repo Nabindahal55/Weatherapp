@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> map </title>
+  <link rel="stylesheet" type="text/css" href="map.css">
+</head>
+<body>
+
+<!-- Navigation bar -->
+<div class="navbar">
+  <div class="logo">
+    <a href="index.html"><img  id="img1" src="logo.png" alt="Main Logo"></a> 
+  </div>
+  <a href="nav.html" class="active1"><img src="cloud.png"Weather"><br>Weatherapp</a>
+  <a href="map.html"><img src="map.png" alt="Map"><br>Map</a>
+  <a href="info.html"><img src="infoo.png" alt="Info"><br>Blog</a>
+  <a href="contact.html"><img src="pngegg.png" alt="Contact"><br>Contact</a>
+  <a href="news.html"><img src="nee.png" alt="Contact"><br>News</a>
+ 
+</div>
+
+
+
+
+
+
+
+  <div class="content">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        
+
+        #map {
+            height: 590px;
+            width: calc(100% - 120px);
+            float: right;
+
+          
+        }
+
+        .legend {
+            position: absolute;
+            top: 20px;
+            left: 125px;
+            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+            display: none;
+         
+        }
+
+        .legend-item {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ccc;
+            margin-right: 5px;
+        }
+
+        .legend-text {
+            font-size: 14px;
+        }
+    </style>
+   </head>
+   <body>
+    <div id="map"></div>
+
+    <div id="legend" class="legend"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+      
+        var map = L.map('map').setView([51.505, -0.09], 3); // Set default location and zoom level
+
+      
+        var baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        
+        var temperatureLayer = L.tileLayer('https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=a985f5790aef9a045353dd9e3e4391eb', {
+            attribution: 'Map data &copy; <a href="https://openweathermap.org">OpenWeatherMap</a>',
+            maxZoom: 18
+        }).addTo(map);
+
+        var pressureLayer = L.tileLayer('https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=a985f5790aef9a045353dd9e3e4391eb', {
+            attribution: 'Map data &copy; <a href="https://openweathermap.org">OpenWeatherMap</a>',
+            maxZoom: 18
+        });
+
+        var windLayer = L.tileLayer('https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=a985f5790aef9a045353dd9e3e4391eb', {
+            attribution: 'Map data &copy; <a href="https://openweathermap.org">OpenWeatherMap</a>',
+            maxZoom: 18
+        });
+
+        var cloudLayer = L.tileLayer('https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=a985f5790aef9a045353dd9e3e4391eb', {
+            attribution: 'Map data &copy; <a href="https://openweathermap.org">OpenWeatherMap</a>',
+            maxZoom: 18
+        });
+
+        var precipitationLayer = L.tileLayer('https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=a985f5790aef9a045353dd9e3e4391eb', {
+            attribution: 'Map data &copy; <a href="https://openweathermap.org">OpenWeatherMap</a>',
+            maxZoom: 18
+        });
+
+     
+        var overlays = {
+            "Temperature": temperatureLayer,
+            "Pressure": pressureLayer,
+            "Wind Speed": windLayer,
+            "Cloud Cover": cloudLayer,
+            "Precipitation": precipitationLayer
+        };
+
+        L.control.layers(null, overlays, { collapsed: false }).addTo(map);
+
+        
+        map.on('overlayadd', function(eventLayer) {
+            var legendContent = '';
+            var layerName = eventLayer.name.toLowerCase().replace(/\s+/g, '-');
+            switch (layerName) {
+                case 'temperature':
+                    legendContent = '<h4>Temperature </h4>' +
+                                    '<div class="legend-item"><div class="legend-color" style="background-color: #99CCFF;"></div><div class="legend-text"> Low Temperature (0°C - 15°C)</div></div>' +
+                                    '<div class="legend-item"><div class="legend-color" style="background-color: #FFFF99;"></div><div class="legend-text"> Moderate Temperature (15°C - 30°C)</div></div>' +
+                                    '<div class="legend-item"><div class="legend-color" style="background-color: #FFCC99;"></div><div class="legend-text"> High Temperature (30°C+)</div></div>';
+                    break;
+                case 'pressure':
+                    legendContent = '<h4>Pressure </h4>' +
+                                    '<div class="legend-item"><div class="legend-color" style="background-color: #99FF99;"></div><div class="legend-text"> High Pressure (above 1013 hPa)</div></div>' +
+                                    '<div class="legend-item"><div class="legend-color" style="background-color: #B2FF66;"></div><div class="legend-text"> Moderate Pressure (1000 hPa - 1013 hPa)</div></div>' +
+                                    '<div class="legend-item"><div class="legend-color" style="background-color: #E0E0E0;"></div><div class="legend-text"> Low Pressure (below 1000 hPa)</div></div>';
+                    break;
+                case 'wind-speed':
+                    legendContent = '<h4>Wind Speed </h4>' +
+                                    '<div class="legend-item"><div class="legend-color" style="background-color: #B266FF;"></div><div class="legend-text"> High Wind Speed (above 25 km/h)</div></div>' +
+                                    '<div class="legend-item"><div class="legend-color" style="background-color: #FF99CC;"></div><div class="legend-text"> Moderate Wind Speed (10 km/h - 25 km/h)</div></div>' +
+                                    '<div class="legend-item"><div class="legend-color" style="background-color: white;"></div><div class="legend-text"> Low Wind Speed (below 10 km/h)</div></div>';
+                    break;
+                case 'cloud-cover':
+                    legendContent = '<h4>Cloud Cover </h4>' +
+                                    '<div class="legend-item"><div class="legend-color" style="background-color: #808080;"></div><div class="legend-text">Gray: Cloud Cover (0% - 100%)</div></div>';
+                    break;
+                case 'precipitation':
+                    legendContent = '<h4>Precipitation </h4>' +
+                                    '<div class="legend-item"><div class="legend-color" style="background-color: #800080;"></div><div class="legend-text">Purple: Precipitation (0 mm - 50 mm)</div></div>';
+                    break;
+                default:
+                    legendContent = '';
+                    break;
+            }
+            document.getElementById('legend').innerHTML = legendContent;
+            document.getElementById('legend').style.display = 'block';
+        });
+
+        map.on('overlayremove', function(eventLayer) {
+            document.getElementById('legend').style.display = 'none';
+        });
+    </script>
+
+
+  </div>
+
+
+
+</body>
+</html>

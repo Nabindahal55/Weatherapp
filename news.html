@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News </title>
+    <link rel="stylesheet" href="news.css">
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo">
+          <a href="index.html"><img  id="img1" src="logo.png" alt="Main Logo"></a> 
+        </div>
+        <a href="nav.html" class="active1"><img src="cloud.png"Weather"><br>Weather</a>
+        <a href="map.html"><img src="map.png" alt="Map"><br>Map</a>
+        <a href="info.html"><img src="infoo.png" alt="Info"><br>Blog</a>
+        <a href="contact.html"><img src="pngegg.png" alt="Contact"><br>Contact</a>
+        <a href="news.html"><img src="nee.png" alt="Contact"><br>News</a>
+       
+      </div>
+     
+    <nav>
+       
+            <div class="search-bar1">
+                <input id="search-text" type="text" class="news-input" placeholder="e.g. Science">
+                <button id="search-button" class="search-button">Search</button>
+            </div>
+       
+    </nav>
+</div>
+    <div class="side1">
+
+    <main>
+        <div class="cards-container container flex" id="cards-container">
+            
+        </div>
+    </main>
+
+    <template id="template-news-card">
+        <div class="card">
+            <div class="card-header">
+                <img src="https://via.placeholder.com/400x200" alt="news-image" id="news-img">
+            </div>
+            <div class="card-content">
+                <h3 id="news-title">This is the Title</h3>
+                <h6 class="news-source" id="news-source">End Gadget 26/08/2023</h6>
+                <p class="news-desc" id="news-desc">this is the news api which can be done under any powerfull circumstance</p>
+            </div>
+        </div>
+    </template>
+    </div>
+    <script src="news.js"></script>
+    
+</body>
+</html>
